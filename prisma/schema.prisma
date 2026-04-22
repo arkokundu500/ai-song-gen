@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SongStatus {
+  queued
+  planning
+  synthesizing
+  mixing
+  completed
+  failed
+}
+
+enum SongMode {
+  prompt
+  lyrics
+}
+
+model Song {
+  id              String     @id @default(cuid())
+  userId          String
+  title           String?
+  status          SongStatus @default(queued)
+  mode            SongMode
+  genre           String
+  mood            String
+  voice           String
+  lengthPreset    String
+  tempoBpm        Int
+  energy          Int
+  clean           Boolean    @default(true)
+  inputPrompt     String?
+  inputLyrics     String?
+  generatedLyrics String?
+  planJson        Json?
+  blobPathname    String?
+  durationSeconds Int?
+  fileSizeBytes   Int?
+  errorCode       String?
+  errorMessage    String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+}
