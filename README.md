@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Song Generator
 
-## Getting Started
+Production MVP for a Groq-powered vocal song generator. The app uses Next.js App Router, TypeScript, Tailwind CSS, shadcn/ui, Clerk auth, Prisma/Postgres, Vercel Blob, Vercel Queues, and Sentry.
 
-First, run the development server:
+## What It Builds
+
+- A signed-in vocal studio with prompt and lyrics modes.
+- Genre, mood, voice, length, tempo, energy, and clean lyric controls.
+- Groq structured-output planning with `openai/gpt-oss-120b`.
+- Groq Orpheus vocal synthesis with `canopylabs/orpheus-v1-english`.
+- WAV segment stitching and MP3 export through `ffmpeg-static`.
+- Saved user song library with private Blob-backed audio streaming.
+
+This MVP creates vocal-only MP3 demos. It does not generate instrumental backing tracks.
+
+## Setup
+
+Copy `.env.example` to `.env.local` and fill in the required values:
 
 ```bash
+npm install
+npm run prisma:generate
+npm run prisma:migrate
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Required services:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Clerk for auth
+- Postgres database for Prisma
+- Vercel Blob store for private MP3 storage
+- Vercel Queues for background generation
+- Groq API key for planning and Orpheus TTS
+- Sentry project for monitoring
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+For local Vercel Queues, run `vercel link` and `vercel env pull`, or provide `VERCEL_QUEUE_API_TOKEN`.
 
-## Learn More
+## Verification
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run lint
+npm run typecheck
+npm run test
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The local app runs at [http://localhost:3000](http://localhost:3000).
